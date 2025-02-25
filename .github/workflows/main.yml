@@ -68,7 +68,6 @@ jobs:
           fi
           echo "RESOURCE_GROUP_NAME=$RESOURCE_GROUP_NAME" >> $GITHUB_ENV
 
-
       - name: Build AKS Cluster and Push Image
         run: |
           docker build -t notes-app ./django-notes-app/
@@ -80,7 +79,30 @@ jobs:
         run: |
           az aks get-credentials --name "$AKS_CLUSTER_NAME" --resource-group "$RESOURCE_GROUP_NAME"
 
+      - name: Fetch ACR Credentials
+        id: fetch_credentials
+        run: |
+          ACR_USERNAME=$(terraform output -raw username)
+          ACR_PASSWORD=$(terraform output -raw password)
+          echo "ACR_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
+          echo "ACR_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
+
+      - name: Docker login
+        run: |
+          echo $ACR_PASSWORD | docker login projectimage01.azurecr.io --username $ACR_USERNAME --password-stdin
+
+      - name: Create Kubernetes Docker Registry Secret
+        run: |
+          kubectl create secret docker-registry regcred \
+            --docker-server=projectimage01.azurecr.io \
+            --docker-username=$ACR_USERNAME \
+            --docker-password=$ACR_PASSWORD \
+            --docker-email=ankit.agrawal@netsmartz.net \
+            --namespace=notes-app
+
       - name: Deploy Application to AKS
         run: |
           kubectl apply -f django.notes.yaml
+          kubectl get node -n notes-app
+          kubectl get pods -n notes-app
           kubectl get svc -n notes-app
