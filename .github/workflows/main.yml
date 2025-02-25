@@ -60,7 +60,7 @@ jobs:
       - name: Get AKS Cluster Name
         id: get_aks_name
         run: |
-           AKS_CLUSTER_NAME=$(terraform output aks_cluster_name | tr -d '"')
+           AKS_CLUSTER_NAME=$(terraform output -json aks_cluster_name | jq -r .)
            if [ -z "$AKS_CLUSTER_NAME" ] || [[ "$AKS_CLUSTER_NAME" == *"Terraform exited with code"* ]]; then
               echo "Error: AKS Cluster Name is empty or invalid!"
               exit 1
