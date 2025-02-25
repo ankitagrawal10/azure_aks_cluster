@@ -56,13 +56,14 @@ jobs:
       - name: Get AKS Cluster Name
         id: get_aks_name
         run: |
-          AKS_CLUSTER_NAME=$(terraform output -raw aks_cluster_name)
-          if [ -z "$AKS_CLUSTER_NAME" ]; then
+         AKS_CLUSTER_NAME=$(terraform output -raw aks_cluster_name 2>/dev/null || echo "")
+         if [ -z "$AKS_CLUSTER_NAME" ]; then
             echo "Error: AKS Cluster Name is empty!"
             exit 1
-          fi
+         fi
           echo "AKS_CLUSTER_NAME=$AKS_CLUSTER_NAME" >> $GITHUB_ENV
-          echo "AKS_CLUSTER_NAME:$AKS_CLUSTER_NAME"  # Print the AKS Cluster Name
+          echo "AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"  # Debugging
+
 
       # Fetch and Export Resource Group Name
       - name: Get Resource Group Name
