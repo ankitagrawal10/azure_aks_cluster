@@ -1,0 +1,99 @@
+# Create namespace
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: notes-app
+
+---
+# MySQL Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  namespace: notes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rootpassword"
+        - name: MYSQL_DATABASE
+          value: "webapp"  
+        ports:
+        - containerPort: 3306
+
+---
+# MySQL Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: notes-app
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None  
+
+---
+# Notes App Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes-app-deployment
+  labels:
+    app: notes-app
+  namespace: notes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notes-app
+  template:
+    metadata:
+      labels:
+        app: notes-app
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: notes-app
+        image: projectimage01.azurecr.io/notes-app:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: MYSQL_HOST
+          value: mysql-service  
+        - name: MYSQL_USER
+          value: root
+        - name: MYSQL_PASSWORD
+          value: rootpassword
+        - name: MYSQL_DATABASE
+          value: webapp
+
+---
+# Notes App Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: notes-app-service
+  namespace: notes-app
+spec:
+  selector:
+    app: notes-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000      
+  type: LoadBalancer  
