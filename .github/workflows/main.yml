@@ -23,6 +23,10 @@ jobs:
         run: |
           az login --tenant add67cd2-c8b2-416c-b171-b61b22be92f4
 
+      - name: Update Azure CLI to the Latest Version
+        run: |
+          sudo apt-get update && sudo apt-get install --only-upgrade -y azure-cli
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.2
         with:
@@ -67,7 +71,7 @@ jobs:
 
       - name: Get AKS Credentials
         run: |
-          az aks get-credentials --name "$AKS_CLUSTER_NAME" --resource-group "$RESOURCE_GROUP_NAME"
+          az aks get-credentials --name "$AKS_CLUSTER_NAME" --resource-group "$RESOURCE_GROUP_NAME" --api-version "2024-08-01"
 
       - name: Fetch ACR Credentials
         id: fetch_credentials
