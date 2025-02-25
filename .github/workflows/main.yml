@@ -52,17 +52,22 @@ jobs:
         id: apply
         run: terraform apply -auto-approve
 
-      # Fetch and Export AKS Cluster Name
+      - name: Debug Terraform Outputs
+        run: |
+         echo "=== Terraform Outputs ==="
+         terraform output
+
       - name: Get AKS Cluster Name
         id: get_aks_name
         run: |
-         AKS_CLUSTER_NAME=$(terraform output -raw aks_cluster_name 2>/dev/null || echo "")
-         if [ -z "$AKS_CLUSTER_NAME" ]; then
-            echo "Error: AKS Cluster Name is empty!"
-            exit 1
-         fi
-          echo "AKS_CLUSTER_NAME=$AKS_CLUSTER_NAME" >> $GITHUB_ENV
-          echo "AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"  # Debugging
+           AKS_CLUSTER_NAME=$(terraform output -raw aks_cluster_name 2>/dev/null || echo "")
+           if [ -z "$AKS_CLUSTER_NAME" ] || [[ "$AKS_CLUSTER_NAME" == *"Terraform exited with code"* ]]; then
+              echo "Error: AKS Cluster Name is empty or invalid!"
+              exit 1
+           fi
+              echo "AKS_CLUSTER_NAME=$AKS_CLUSTER_NAME" >> $GITHUB_ENV
+              echo "Extracted AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"
+
 
 
       # Fetch and Export Resource Group Name
