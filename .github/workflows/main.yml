@@ -62,13 +62,18 @@ jobs:
       - name: Get AKS Cluster Name
         id: get_aks_name
         run: |
-           AKS_CLUSTER_NAME=$(terraform output aks_cluster_name )
-           if [ -z "$AKS_CLUSTER_NAME" ] || [[ "$AKS_CLUSTER_NAME" == *"Terraform exited with code"* ]]; then
+            AKS_CLUSTER_NAME=$(terraform output aks_cluster_name | tr -d '"')
+    
+            # Debug output
+            echo "Extracted AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"
+    
+            if [ -z "$AKS_CLUSTER_NAME" ]; then
               echo "Error: AKS Cluster Name is empty or invalid!"
               exit 1
-           fi
+            fi
+    
               echo "AKS_CLUSTER_NAME=$AKS_CLUSTER_NAME" >> $GITHUB_ENV
-              echo "Extracted AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"
+
 
 
 
