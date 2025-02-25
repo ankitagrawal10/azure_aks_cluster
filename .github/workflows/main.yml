@@ -52,22 +52,12 @@ jobs:
         id: get_aks_name
         run: |
           AKS_CLUSTER_NAME=$(terraform output -raw aks_cluster_name)
-          if [ -z "$AKS_CLUSTER_NAME" ]; then
-            echo "Error: AKS Cluster Name is empty!"
-            exit 1
-          fi
-          echo "AKS_CLUSTER_NAME=$AKS_CLUSTER_NAME" >> $GITHUB_ENV
-
+          
       - name: Get Resource Group Name
         id: get_rg_name
         run: |
           RESOURCE_GROUP_NAME=$(terraform output -raw resource_group_name)
-          if [ -z "$RESOURCE_GROUP_NAME" ]; then
-            echo "Error: Resource Group Name is empty!"
-            exit 1
-          fi
-          echo "RESOURCE_GROUP_NAME=$RESOURCE_GROUP_NAME" >> $GITHUB_ENV
-
+        
       - name: Build AKS Cluster and Push Image
         run: |
           docker build -t notes-app ./django-notes-app/
