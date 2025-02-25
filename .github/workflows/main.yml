@@ -52,16 +52,30 @@ jobs:
         id: apply
         run: terraform apply -auto-approve
 
+      # Fetch and Export AKS Cluster Name
       - name: Get AKS Cluster Name
         id: get_aks_name
         run: |
           AKS_CLUSTER_NAME=$(terraform output -raw aks_cluster_name)
-          
+          if [ -z "$AKS_CLUSTER_NAME" ]; then
+            echo "Error: AKS Cluster Name is empty!"
+            exit 1
+          fi
+          echo "AKS_CLUSTER_NAME=$AKS_CLUSTER_NAME" >> $GITHUB_ENV
+          echo "AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"  # Print the AKS Cluster Name
+
+      # Fetch and Export Resource Group Name
       - name: Get Resource Group Name
         id: get_rg_name
         run: |
           RESOURCE_GROUP_NAME=$(terraform output -raw resource_group_name)
-        
+          if [ -z "$RESOURCE_GROUP_NAME" ]; then
+            echo "Error: Resource Group Name is empty!"
+            exit 1
+          fi
+          echo "RESOURCE_GROUP_NAME=$RESOURCE_GROUP_NAME" >> $GITHUB_ENV
+          echo "RESOURCE_GROUP_NAME: $RESOURCE_GROUP_NAME"  # Print the Resource Group Name
+
       - name: Build AKS Cluster and Push Image
         run: |
           docker build -t notes-app ./django-notes-app/
@@ -71,14 +85,17 @@ jobs:
 
       - name: Get AKS Credentials
         run: |
-          az aks get-credentials --name "$AKS_CLUSTER_NAME" --resource-group "$RESOURCE_GROUP_NAME" --api-version "2024-08-01"
+          az aks get-credentials --name "$AKS_CLUSTER_NAME" --resource-group "$RESOURCE_GROUP_NAME"
 
+      # Fetch and Export ACR Credentials (Username and Password)
       - name: Fetch ACR Credentials
         id: fetch_credentials
         run: |
           ACR_USERNAME=$(terraform output -raw username)
           ACR_PASSWORD=$(terraform output -raw password)
-    
+          echo "ACR_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
+          echo "ACR_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
+          echo "ACR_USERNAME: $ACR_USERNAME"  # Print the ACR Username (Avoid printing the password for security reasons)
 
       - name: Docker login
         run: |
