@@ -74,8 +74,7 @@ jobs:
         run: |
           ACR_USERNAME=$(terraform output -raw username)
           ACR_PASSWORD=$(terraform output -raw password)
-          echo "ACR_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
-          echo "ACR_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
+    
 
       - name: Docker login
         run: |
