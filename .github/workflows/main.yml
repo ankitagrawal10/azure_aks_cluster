@@ -96,6 +96,7 @@ jobs:
       - name: Deploy namespace
         run: |
           kubectl apply -f namespace.yaml
+          kubectl get ns
 
            
       - name: Create Kubernetes Docker Registry Secret
@@ -110,7 +111,10 @@ jobs:
 
       - name: Deploy Application to AKS
         run: |
+          kubectl get secrets -n notes-app
           kubectl apply -f django-notes.yaml
           kubectl get node -n notes-app
+          sleep 50
           kubectl get pods -n notes-app
+          sleep 120
           kubectl get svc -n notes-app
