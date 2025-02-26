@@ -92,7 +92,7 @@ jobs:
           echo "Extracted ACR_USERNAME: $ACR_USERNAME" 
           echo "Extracted ACR_PASSWORD: $ACR_PASSWORD"  
 
-      - name: Docker login
+      - name: Docker Azure login
       - uses: azure/docker-login@v1
         with: 
           login-server: projectimage01.azurecr.io
@@ -103,7 +103,7 @@ jobs:
         run: |
           kubectl create secret docker-registry regcred \
             --docker-server=projectimage01.azurecr.io \
-            --docker-username=$ACR_USERNAME \
+            --docker-username=projectimage01\
             --docker-password=$ACR_PASSWORD \
             --docker-email=ankit.agrawal@netsmartz.net \
             --namespace=notes-app
