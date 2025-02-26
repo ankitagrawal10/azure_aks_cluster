@@ -67,7 +67,7 @@ jobs:
       #       # Debug output
       #       echo "Extracted AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"
 
-      # Fetch and Export Resource Group Name
+      
 
      
 
