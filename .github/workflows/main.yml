@@ -62,7 +62,8 @@ jobs:
       - name: Get AKS Credentials (No need for aks-set-context)
         run: |
           az aks get-credentials --name "ankit-cluster" --resource-group "ankit-rg"
-          kubectl config use-context "azurerm"
+          kubectl config current-context
+
 
       - name: Build AKS Cluster and Push Image
         run: |
