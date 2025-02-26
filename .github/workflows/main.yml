@@ -73,7 +73,7 @@ jobs:
 
       - name: Get AKS Credentials
         run: |
-          az aks get-credentials --name "ankit-cluster" --resource-group "ankit_rg"
+          az aks get-credentials --name "ankit-cluster" --resource-group "ankit-rg"
 
 
       - name: Build AKS Cluster and Push Image
