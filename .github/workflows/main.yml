@@ -59,22 +59,9 @@ jobs:
          echo "=== JSON Format ==="
          terraform output -json aks_cluster_name
 
-      # - name: Get AKS Cluster Name
-      #   id: get_aks_name
-      #   run: |
-      #       AKS_CLUSTER_NAME=$(terraform output aks_cluster_name | tr -d '"')
-    
-      #       # Debug output
-      #       echo "Extracted AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"
-
-      
-
-     
-
       - name: Get AKS Credentials
         run: |
           az aks get-credentials --name "ankit-cluster" --resource-group "ankit-rg"
-
 
       - name: Build AKS Cluster and Push Image
         run: |
@@ -83,7 +70,6 @@ jobs:
           az acr login --name projectimage01
           docker push projectimage01.azurecr.io/notes-app:latest
 
-      # Fetch and Export ACR Credentials (Username and Password)
       - name: Fetch ACR Credentials
         id: fetch_credentials
         run: |
@@ -93,17 +79,17 @@ jobs:
           echo "Extracted ACR_PASSWORD: $ACR_PASSWORD"  
 
       - name: Docker Azure login
-      - uses: azure/docker-login@v1
+        uses: azure/docker-login@v1
         with: 
           login-server: projectimage01.azurecr.io
-          username: projectimage01
+          username: $ACR_USERNAME
           password: $ACR_PASSWORD
 
       - name: Create Kubernetes Docker Registry Secret
         run: |
           kubectl create secret docker-registry regcred \
             --docker-server=projectimage01.azurecr.io \
-            --docker-username=projectimage01\
+            --docker-username=$ACR_USERNAME \
             --docker-password=$ACR_PASSWORD \
             --docker-email=ankit.agrawal@netsmartz.net \
             --namespace=notes-app
