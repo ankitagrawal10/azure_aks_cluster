@@ -89,8 +89,8 @@ jobs:
         run: |
           kubectl create secret docker-registry regcred \
             --docker-server=projectimage01.azurecr.io \
-            --docker-username=$ACR_USERNAME \
-            --docker-password=$ACR_PASSWORD \
+            --docker-username="$ACR_USERNAME" \
+            --docker-password="$ACR_PASSWORD" \
             --docker-email=ankit.agrawal@netsmartz.net \
             --namespace=notes-app
 
