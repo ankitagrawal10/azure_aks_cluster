@@ -86,13 +86,27 @@ jobs:
           password: $ACR_PASSWORD
 
       - name: Create Kubernetes Docker Registry Secret
-        run: |
-          kubectl create secret docker-registry regcred \
-            --docker-server=projectimage01.azurecr.io \
-            --docker-username="$ACR_USERNAME" \
-            --docker-password="$ACR_PASSWORD" \
-            --docker-email=ankit.agrawal@netsmartz.net \
-            --namespace=notes-app
+        uses: azure/k8s-create-secret@v4
+        with:
+          namespace: "notes-app"
+          secret-name: "regcred"
+          container-registry-url: "projectimage01.azurecr.io"
+          container-registry-username: "$ACR_USERNAME"
+          container-registry-password: "$ACR_PASSWORD"
+
+
+
+
+
+        
+        # run: |
+        #   kubectl create secret docker-registry regcred \
+        #     --docker-server=projectimage01.azurecr.io \
+        #     --docker-username="$ACR_USERNAME" \
+        #     --docker-password="$ACR_PASSWORD" \
+        #     --docker-email=ankit.agrawal@netsmartz.net \
+        #     --namespace=notes-app
+
 
       - name: Deploy Application to AKS
         run: |
