@@ -1,10 +1,4 @@
-# Create namespace
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: notes-app
 
----
 # MySQL Deployment
 apiVersion: apps/v1
 kind: Deployment

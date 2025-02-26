@@ -91,6 +91,12 @@ jobs:
         with:
            resource-group: 'ankit-rg'
            cluster-name: 'ankit-cluster'
+
+      
+      - name: Deploy namespace
+        run: |
+          kubectl apply -f namespace.yaml
+
            
       - name: Create Kubernetes Docker Registry Secret
         uses: azure/k8s-create-secret@v4
@@ -104,7 +110,7 @@ jobs:
 
       - name: Deploy Application to AKS
         run: |
-          kubectl apply -f django.notes.yaml
+          kubectl apply -f django-notes.yaml
           kubectl get node -n notes-app
           kubectl get pods -n notes-app
           kubectl get svc -n notes-app
