@@ -87,6 +87,11 @@ jobs:
           username: $ACR_USERNAME
           password: $ACR_PASSWORD
 
+      - uses: azure/aks-set-context@v4
+        with:
+           resource-group: 'ankit-rg'
+           cluster-name: 'ankit-cluster'
+           
       - name: Create Kubernetes Docker Registry Secret
         uses: azure/k8s-create-secret@v4
         with:
