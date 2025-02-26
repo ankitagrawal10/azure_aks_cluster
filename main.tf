@@ -1,7 +1,7 @@
 module "rg" {
   source = "./module/resource_group"
-  name = "ankit_rg"
-  location = "East Asia"
+  name = "ankit-rg"
+  location = "East US"
 }
 
 module "virtual-net" {
@@ -24,7 +24,7 @@ module "virtual_subnet"{
 module "aks_cluster" {
   source = "./module/k8s_cluster"
   location = module.rg.location
-  name = "cluster-${random_pet.azurerm_kubernets_cluster_name.id}"
+  name = "ankit-cluster"
   resource_group_name = module.rg.resource_group_name
   dns_prefix = "dns-${random_pet.azurerm_kubernetes_cluster_dns_prefix.id}"
   node_pool_name = "agentpool"
@@ -32,9 +32,6 @@ module "aks_cluster" {
   node_count = 1
 }
 
-resource "random_pet" "azurerm_kubernets_cluster_name" {
-  prefix = "cluster"
-}
 
 resource "random_pet" "azurerm_kubernetes_cluster_dns_prefix" {
   prefix = "dns"
