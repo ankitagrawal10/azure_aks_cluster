@@ -63,6 +63,11 @@ jobs:
         run: |
           az aks get-credentials --name "ankit-cluster" --resource-group "ankit-rg"
 
+      - name: Setup Kubernetes Context
+        uses: azure/k8s-set-context@v1
+        with:
+          kubeconfig: $HOME/.kube/config
+
       - name: Build AKS Cluster and Push Image
         run: |
           docker build -t notes-app ./django-notes-app/
@@ -93,6 +98,7 @@ jobs:
           container-registry-url: "projectimage01.azurecr.io"
           container-registry-username: "$ACR_USERNAME"
           container-registry-password: "$ACR_PASSWORD"
+          secret-type: kubernetes.io/dockerconfigjson
 
       - name: Deploy Application to AKS
         run: |
