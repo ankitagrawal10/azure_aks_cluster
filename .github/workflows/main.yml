@@ -94,20 +94,6 @@ jobs:
           container-registry-username: "$ACR_USERNAME"
           container-registry-password: "$ACR_PASSWORD"
 
-
-
-
-
-        
-        # run: |
-        #   kubectl create secret docker-registry regcred \
-        #     --docker-server=projectimage01.azurecr.io \
-        #     --docker-username="$ACR_USERNAME" \
-        #     --docker-password="$ACR_PASSWORD" \
-        #     --docker-email=ankit.agrawal@netsmartz.net \
-        #     --namespace=notes-app
-
-
       - name: Deploy Application to AKS
         run: |
           kubectl apply -f django.notes.yaml
