@@ -93,8 +93,11 @@ jobs:
           echo "Extracted ACR_PASSWORD: $ACR_PASSWORD"  
 
       - name: Docker login
-        run: |
-          echo $ACR_PASSWORD | docker login projectimage01.azurecr.io --username $ACR_USERNAME --password-stdin
+      - uses: azure/docker-login@v1
+        with: 
+          login-server: projectimage01.azurecr.io
+          username: projectimage01
+          password: $ACR_PASSWORD
 
       - name: Create Kubernetes Docker Registry Secret
         run: |
