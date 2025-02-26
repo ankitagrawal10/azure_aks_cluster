@@ -59,15 +59,10 @@ jobs:
          echo "=== JSON Format ==="
          terraform output -json aks_cluster_name
 
-      - name: Get AKS Credentials
+      - name: Get AKS Credentials (No need for aks-set-context)
         run: |
           az aks get-credentials --name "ankit-cluster" --resource-group "ankit-rg"
-
-      - name: Set AKS Cluster Context
-        uses: azure/aks-set-context@v1
-        with:
-          cluster-name: "ankit-cluster"
-          resource-group: "ankit-rg"
+          kubectl config use-context "azurerm"
 
       - name: Build AKS Cluster and Push Image
         run: |
