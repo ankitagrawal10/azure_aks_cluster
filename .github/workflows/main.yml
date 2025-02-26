@@ -94,7 +94,7 @@ jobs:
 
       - name: Docker login
         run: |
-          docker login projectimage01.azurecr.io
+          echo $ACR_PASSWORD | docker login projectimage01.azurecr.io --username $ACR_USERNAME --password-stdin
 
       - name: Create Kubernetes Docker Registry Secret
         run: |
