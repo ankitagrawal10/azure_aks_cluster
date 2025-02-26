@@ -59,10 +59,16 @@ jobs:
          echo "=== JSON Format ==="
          terraform output -json aks_cluster_name
 
-      - name: Get AKS Credentials and Set Kubeconfig
+      - name: Get AKS Credentials
         run: |
           az aks get-credentials --name "ankit-cluster" --resource-group "ankit-rg"
-        
+
+      - name: Set AKS Cluster Context
+        uses: azure/aks-set-context@v1
+        with:
+          cluster-name: "ankit-cluster"
+          resource-group: "ankit-rg"
+
       - name: Build AKS Cluster and Push Image
         run: |
           docker build -t notes-app ./django-notes-app/
@@ -76,7 +82,7 @@ jobs:
           ACR_USERNAME=$(terraform output username | tr -d '"')
           ACR_PASSWORD=$(terraform output password | tr -d '"')
           echo "Extracted ACR_USERNAME: $ACR_USERNAME" 
-          echo "Extracted ACR_PASSWORD: $ACR_PASSWORD"  
+          echo "Extracted ACR_PASSWORD: $ACR_PASSWORD"
 
       - name: Docker Azure login
         uses: azure/docker-login@v1
