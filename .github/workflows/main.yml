@@ -59,13 +59,13 @@ jobs:
          echo "=== JSON Format ==="
          terraform output -json aks_cluster_name
 
-      - name: Get AKS Cluster Name
-        id: get_aks_name
-        run: |
-            AKS_CLUSTER_NAME=$(terraform output aks_cluster_name | tr -d '"')
+      # - name: Get AKS Cluster Name
+      #   id: get_aks_name
+      #   run: |
+      #       AKS_CLUSTER_NAME=$(terraform output aks_cluster_name | tr -d '"')
     
-            # Debug output
-            echo "Extracted AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"
+      #       # Debug output
+      #       echo "Extracted AKS_CLUSTER_NAME: $AKS_CLUSTER_NAME"
 
       # Fetch and Export Resource Group Name
 
@@ -73,7 +73,7 @@ jobs:
 
       - name: Get AKS Credentials
         run: |
-          az aks get-credentials --name "$AKS_CLUSTER_NAME" --resource-group ankit_rg
+          az aks get-credentials --name "ankit-cluster" --resource-group "ankit_rg"
 
 
       - name: Build AKS Cluster and Push Image
@@ -87,15 +87,14 @@ jobs:
       - name: Fetch ACR Credentials
         id: fetch_credentials
         run: |
-          ACR_USERNAME=$(terraform output -raw username)
-          ACR_PASSWORD=$(terraform output -raw password)
-          echo "ACR_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
-          echo "ACR_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
-          echo "ACR_USERNAME: $ACR_USERNAME"  # Print the ACR Username (Avoid printing the password for security reasons)
+          ACR_USERNAME=$(terraform output username | tr -d '"')
+          ACR_PASSWORD=$(terraform output password | tr -d '"')
+          echo "Extracted ACR_USERNAME: $ACR_USERNAME" 
+          echo "Extracted ACR_PASSWORD: $ACR_PASSWORD"  
 
       - name: Docker login
         run: |
-          echo $ACR_PASSWORD | docker login projectimage01.azurecr.io --username $ACR_USERNAME --password-stdin
+          docker login projectimage01.azurecr.io
 
       - name: Create Kubernetes Docker Registry Secret
         run: |
