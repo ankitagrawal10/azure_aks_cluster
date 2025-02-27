@@ -59,7 +59,7 @@ jobs:
          echo "=== JSON Format ==="
          terraform output -json aks_cluster_name
 
-      - name: Get AKS Credentials (No need for aks-set-context)
+      - name: Get AKS Credentials 
         run: |
           az aks get-credentials --name "ankit-cluster" --resource-group "ankit-rg"
           kubectl config current-context
@@ -99,15 +99,25 @@ jobs:
           kubectl get ns
 
            
+      # - name: Create Kubernetes Docker Registry Secret
+      #   uses: azure/k8s-create-secret@v4
+      #   with:
+      #     namespace: "notes-app"
+      #     secret-name: "regcred"
+      #     container-registry-url: "projectimage01.azurecr.io"
+      #     container-registry-username: "$ACR_USERNAME"
+      #     container-registry-password: "$ACR_PASSWORD"
+      #     secret-type: kubernetes.io/dockerconfigjson
+
+      
       - name: Create Kubernetes Docker Registry Secret
-        uses: azure/k8s-create-secret@v4
-        with:
-          namespace: "notes-app"
-          secret-name: "regcred"
-          container-registry-url: "projectimage01.azurecr.io"
-          container-registry-username: "$ACR_USERNAME"
-          container-registry-password: "$ACR_PASSWORD"
-          secret-type: kubernetes.io/dockerconfigjson
+        run: |
+          kubectl create secret docker-registry regcred \
+            --docker-server=projectimage01.azurecr.io \
+            --docker-username=$ACR_USERNAME \
+            --docker-password=$ACR_PASSWORD \
+            --docker-email="ankit.agrawal@netsmartz.net" \
+            --namespace notes-app
 
       - name: Deploy Application to AKS
         run: |
