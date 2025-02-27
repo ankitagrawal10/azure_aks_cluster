@@ -70,6 +70,7 @@ jobs:
           docker build -t notes-app ./django-notes-app/
           docker tag notes-app:latest projectimage01.azurecr.io/notes-app:latest
           az acr login --name projectimage01
+          az acr update --name project0100 --anonymous-pull-enabled true
           docker push projectimage01.azurecr.io/notes-app:latest
 
       - name: Fetch ACR Credentials
@@ -97,6 +98,8 @@ jobs:
         run: |
           kubectl apply -f namespace.yaml
           kubectl get ns
+          
+
 
            
       # - name: Create Kubernetes Docker Registry Secret
@@ -110,14 +113,14 @@ jobs:
       #     secret-type: kubernetes.io/dockerconfigjson
 
       
-      - name: Create Kubernetes Docker Registry Secret
-        run: |
-          kubectl create secret docker-registry regcred \
-            --docker-server=projectimage01.azurecr.io \
-            --docker-username=$ACR_USERNAME \
-            --docker-password=$ACR_PASSWORD \
-            --docker-email="ankit.agrawal@netsmartz.net" \
-            --namespace notes-app
+      # - name: Create Kubernetes Docker Registry Secret
+      #   run: |
+      #     kubectl create secret docker-registry regcred \
+      #       --docker-server=projectimage01.azurecr.io \
+      #       --docker-username=$ACR_USERNAME \
+      #       --docker-password=$ACR_PASSWORD \
+      #       --docker-email="ankit.agrawal@netsmartz.net" \
+      #       --namespace notes-app
 
       - name: Deploy Application to AKS
         run: |
