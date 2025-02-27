@@ -62,7 +62,7 @@ spec:
       containers:
       - name: notes-app
         image: projectimage01.azurecr.io/notes-app:latest
-        imagePullPolicy: Always
+        # imagePullPolicy: Always
         ports:
         - containerPort: 8000
         env:
@@ -74,8 +74,8 @@ spec:
           value: rootpassword
         - name: MYSQL_DATABASE
           value: webapp
-      imagePullSecrets:
-        - name: regcred
+      # imagePullSecrets:
+      #   - name: regcred
 
 ---
 # Notes App Service
