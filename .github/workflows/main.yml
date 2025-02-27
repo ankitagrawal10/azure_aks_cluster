@@ -70,7 +70,7 @@ jobs:
           docker build -t notes-app ./django-notes-app/
           docker tag notes-app:latest projectimage01.azurecr.io/notes-app:latest
           az acr login --name projectimage01
-          az acr update --name project0100 --anonymous-pull-enabled true
+          az acr update --name projectimage01 --anonymous-pull-enabled true
           docker push projectimage01.azurecr.io/notes-app:latest
 
       - name: Fetch ACR Credentials
