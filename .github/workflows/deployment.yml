@@ -51,7 +51,7 @@ jobs:
 
       - uses: azure/aks-set-context@v4
         with:
-           resource-group: "${{ secrets.MY_RESOURCE_GROUP_NAME }}
+           resource-group: ${{ secrets.MY_RESOURCE_GROUP_NAME }}
            cluster-name: ${{ secrets.MY_AKS_CLUSTER }}
 
       - name: Deploy Application to AKS
