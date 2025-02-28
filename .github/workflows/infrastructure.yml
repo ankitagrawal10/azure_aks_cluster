@@ -1,6 +1,7 @@
 name: create aks cluster
 
-on: push
+on: 
+   workflow_dispatch:
     # branches:
     #   - main 
     # paths:
