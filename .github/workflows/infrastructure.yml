@@ -1,4 +1,4 @@
-name: Create AKS Cluster with Terraform
+name: create aks cluster
 
 on:
   push:
