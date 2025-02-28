@@ -23,7 +23,7 @@ jobs:
       
       - name: Get AKS Credentials 
         run: |
-          az aks get-credentials --name "${{secret.MY_AKS_CLUSTER}}" --resource-group "${{secret.MY_RESOURCE_GROUP_NAME}}"
+          az aks get-credentials --name "${{ secrets.MY_AKS_CLUSTER }}" --resource-group "${{ secrets.MY_RESOURCE_GROUP_NAME }}"
           kubectl config current-context
 
 
