@@ -1,11 +1,10 @@
 name: create aks cluster
 
-on:
-  push:
-    branches:
-      - main 
-    paths:
-      - '**/*.tf'  
+on: push
+    # branches:
+    #   - main 
+    # paths:
+    #   - '**/*.tf'  
 
 jobs:
   terraform:
