@@ -47,11 +47,3 @@ module "acr_registry" {
 }
 
 
-terraform {
-  backend "azurerm" {
-    resource_group_name   = "ankit-rg"
-    storage_account_name  = "terraformstatestorage"
-    container_name        = "tfstate"
-    key                   = "aks_cluster.tfstate"
-  }
-}
