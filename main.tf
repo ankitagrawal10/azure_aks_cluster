@@ -29,7 +29,7 @@ module "aks_cluster" {
   dns_prefix = "dns-${random_pet.azurerm_kubernetes_cluster_dns_prefix.id}"
   node_pool_name = "agentpool"
   vm_size = "Standard_D2_v2"
-  node_count = 1
+  node_count = 2
 }
 
 
