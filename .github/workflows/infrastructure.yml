@@ -1,0 +1,52 @@
+name: Create AKS Cluster with Terraform
+
+on:
+  push:
+    paths:
+      - 'terraform/**'
+  workflow_dispatch:
+
+jobs:
+  AKS-Cluster-Deployment:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3.1.0
+
+      - name: Az CLI login
+        run: |
+          az login --tenant add67cd2-c8b2-416c-b171-b61b22be92f4
+
+      - name: Update Azure CLI to the Latest Version
+        run: |
+          sudo apt-get update && sudo apt-get install --only-upgrade -y azure-cli
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.2
+        with:
+          terraform_version: latest
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+
+      - name: Refresh Terraform State
+        id: refresh
+        run: terraform refresh
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve tfplan
