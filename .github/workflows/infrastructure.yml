@@ -3,8 +3,8 @@ name: Create AKS Cluster with Terraform
 on:
   push:
     paths:
-      - 'terraform/**'
-  workflow_dispatch:
+      - '**/*.tf'
+
 
 jobs:
   AKS-Cluster-Deployment:
