@@ -35,8 +35,7 @@ jobs:
 
       - name: Build AKS Cluster and Push Image
         run: |
-          docker build --no-cache -t notes-app:${{ github.sha }} ./django-notes-app/
-          docker tag notes-app:${{ github.sha }} projectimage01.azurecr.io/notes-app:${{ github.sha }}
+          docker build ./django-notes-app/ -t projectimage01.azurecr.io/notes-app:${{ github.sha }}
           az acr login --name projectimage01
           az acr update --name projectimage01 --anonymous-pull-enabled true
           docker push projectimage01.azurecr.io/notes-app:${{ github.sha }}
