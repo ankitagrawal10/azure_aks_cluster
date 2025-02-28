@@ -2,17 +2,14 @@ name: Create AKS Cluster with Terraform
 
 on:
   push:
+    branches:
+      - main 
     paths:
-      - '**/*.tf'
-
+      - '**/*.tf'  
 
 jobs:
   AKS-Cluster-Deployment:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: .
 
     steps:
       - name: Checkout code
