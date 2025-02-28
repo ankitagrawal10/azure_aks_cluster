@@ -56,6 +56,5 @@ jobs:
 
       - name: Deploy Application to AKS
         run: |
-          kubectl get secrets -n notes-app || echo "Secrets not found"
           kubectl apply -f django-notes.yaml
-          kubectl rollout status deployment/notes-app
+          
