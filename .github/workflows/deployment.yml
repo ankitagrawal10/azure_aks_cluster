@@ -15,7 +15,7 @@ jobs:
 
       - name: Az CLI login
         run: |
-          az login --tenant add67cd2-c8b2-416c-b171-b61b22be92f4
+           az login --tenant add67cd2-c8b2-416c-b171-b61b22be92f4
 
       - name: Update Azure CLI to the Latest Version
         run: |
@@ -26,16 +26,12 @@ jobs:
           az aks get-credentials --name "${{ secrets.MY_AKS_CLUSTER }}" --resource-group "${{ secrets.MY_RESOURCE_GROUP_NAME }}"
           kubectl config current-context
 
-
       - name: Build AKS Cluster and Push Image
         run: |
           docker build --no-cache -t notes-app:${{ github.sha }} ./django-notes-app/
           docker tag notes-app:${{ github.sha }} projectimage01.azurecr.io/notes-app:${{ github.sha }}
-          az acr login --name projectimage01
           az acr update --name projectimage01 --anonymous-pull-enabled true
           docker push projectimage01.azurecr.io/notes-app:${{ github.sha }}
-
-      - name: Fetch ACR Credentials
 
       - name: Fetch ACR Credentials
         id: fetch_credentials
@@ -54,14 +50,11 @@ jobs:
 
       - uses: azure/aks-set-context@v4
         with:
-           resource-group: 'ankit-rg'
-           cluster-name: 'ankit-cluster'
+           resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+           cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
 
-          
       - name: Deploy Application to AKS
         run: |
-          kubectl get secrets -n notes-app
+          kubectl get secrets -n notes-app || echo "Secrets not found"
           kubectl apply -f django-notes.yaml
-
-
-
+          kubectl rollout status deployment/notes-app
