@@ -35,10 +35,10 @@ jobs:
 
       - name: Build AKS Cluster and Push Image
         run: |
-          docker build ./django-notes-app/ -t projectimage01.azurecr.io/notes-app:${{ github.sha }}
+          docker build ./django-notes-app/ -t projectimage01.azurecr.io/notes-app:latest
           az acr login --name projectimage01
           az acr update --name projectimage01 --anonymous-pull-enabled true
-          docker push projectimage01.azurecr.io/notes-app:${{ github.sha }}
+          docker push projectimage01.azurecr.io/notes-app:latest
 
       - name: Fetch ACR Credentials
         id: fetch_credentials

@@ -68,7 +68,7 @@ spec:
     spec:
       containers:
       - name: notes-app
-        image: projectimage01.azurecr.io/notes-app:${{ github.sha }}
+        image: projectimage01.azurecr.io/notes-app:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
