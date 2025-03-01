@@ -22,7 +22,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           value: "rootpassword"
         - name: MYSQL_DATABASE
-          value: "webapp"  
+          value: "devops"  
         ports:
         - containerPort: 3306
 
@@ -80,7 +80,7 @@ spec:
         - name: MYSQL_PASSWORD
           value: rootpassword
         - name: MYSQL_DATABASE
-          value: webapp
+          value: devops
       # imagePullSecrets:
       #   - name: regcred
 
