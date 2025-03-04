@@ -15,7 +15,7 @@ jobs:
 
       - name: Az CLI login
         run: |
-           az login --tenant add67cd2-c8b2-416c-b171-b61b22be92f4
+           az login --tenant ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Update Azure CLI to the Latest Version
         run: |
@@ -26,12 +26,12 @@ jobs:
           az aks get-credentials --name "${{ secrets.MY_AKS_CLUSTER }}" --resource-group "${{ secrets.MY_RESOURCE_GROUP_NAME }}"
           kubectl config current-context
 
-      - name: Docker Azure login
-        uses: azure/docker-login@v1
-        with: 
-          login-server: projectimage01.azurecr.io
-          username: $ACR_USERNAME
-          password: $ACR_PASSWORD
+      # - name: Docker Azure login
+      #   uses: azure/docker-login@v1
+      #   with: 
+      #     login-server: projectimage01.azurecr.io
+      #     username: $ACR_USERNAME
+      #     password: $ACR_PASSWORD
 
       - name: Build AKS Cluster and Push Image
         run: |
