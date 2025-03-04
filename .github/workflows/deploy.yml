@@ -35,7 +35,7 @@ jobs:
 
       - name: Build AKS Cluster and Push Image
         run: |
-          docker build --no-cache ./assignment/ -t projectimage01.azurecr.io/notes-app:latest
+          docker build --no-cache ./flask-app/ -t projectimage01.azurecr.io/notes-app:latest
           az acr login --name projectimage01
           az acr update --name projectimage01 --anonymous-pull-enabled true
           docker push projectimage01.azurecr.io/notes-app:latest
