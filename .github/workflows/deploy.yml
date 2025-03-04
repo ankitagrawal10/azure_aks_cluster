@@ -1,9 +1,9 @@
 name: Deploy Application
 
 on:
-  workflow_dispatch:
+  push:
     path:
-      - './django-notes/'
+      - './assignment/'
 
 jobs:
   deployment:
@@ -35,7 +35,7 @@ jobs:
 
       - name: Build AKS Cluster and Push Image
         run: |
-          docker build --no-cache ./django-notes-app/ -t projectimage01.azurecr.io/notes-app:latest
+          docker build --no-cache ./assignment/ -t projectimage01.azurecr.io/notes-app:latest
           az acr login --name projectimage01
           az acr update --name projectimage01 --anonymous-pull-enabled true
           docker push projectimage01.azurecr.io/notes-app:latest
@@ -57,6 +57,13 @@ jobs:
 
       - name: Deploy Application to AKS
         run: |
-          kubectl apply -f namespace.yaml
-          kubectl apply -f django-notes.yaml
-          kubectl rollout restart deployment notes-app-deployment -n notes-app
+          cd k8s 
+          kubectl create ns assignment
+          kubectl apply -n assignment -f mysql-deployment.yml
+          kubectl apply -n assignment -f mysql-configmap.yml
+          kubectl apply -n assignment -f mysql-secrets.yml
+          kubectl apply -n assignment -f mysql-svc.yml
+          kubectl get all -n assignment
+          kubectl apply -n assignment -f two-tier-app-deployment.yml
+          kubectl apply -n assignment -f two-tier-app-svc.yml
+          kubectl get all -n assignment

@@ -22,7 +22,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           value: "rootpassword"
         - name: MYSQL_DATABASE
-          value: "devops"  
+          value: "devops"   
         ports:
         - containerPort: 3306
 
@@ -99,3 +99,5 @@ spec:
       port: 80
       targetPort: 8000      
   type: LoadBalancer  
+  externalIPs: 
+    - 74.179.232.243
