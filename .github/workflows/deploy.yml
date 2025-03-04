@@ -40,15 +40,6 @@ jobs:
           az acr update --name projectimage01 --anonymous-pull-enabled true
           docker push projectimage01.azurecr.io/notes-app:latest
 
-      - name: Fetch ACR Credentials
-        id: fetch_credentials
-        run: |
-          ACR_USERNAME=$(terraform output username | tr -d '"')
-          ACR_PASSWORD=$(terraform output password | tr -d '"')
-          echo "Extracted ACR_USERNAME: $ACR_USERNAME" 
-          echo "Extracted ACR_PASSWORD: $ACR_PASSWORD"
-
-
 
       - uses: azure/aks-set-context@v4
         with:
@@ -58,12 +49,13 @@ jobs:
       - name: Deploy Application to AKS
         run: |
           cd k8s 
-          kubectl create ns assignment
           kubectl apply -n assignment -f mysql-deployment.yml
           kubectl apply -n assignment -f mysql-configmap.yml
           kubectl apply -n assignment -f mysql-secrets.yml
           kubectl apply -n assignment -f mysql-svc.yml
-          kubectl get all -n assignment
           kubectl apply -n assignment -f two-tier-app-deployment.yml
+          sleep 60
           kubectl apply -n assignment -f two-tier-app-svc.yml
+          sleep 50
           kubectl get all -n assignment
+          kubectl rollout restart deployment two-tier-app -n assingment
