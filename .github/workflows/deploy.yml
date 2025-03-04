@@ -58,4 +58,4 @@ jobs:
           kubectl apply -n assignment -f two-tier-app-svc.yml
           sleep 50
           kubectl get all -n assignment
-          kubectl rollout restart deployment two-tier-app -n assingment
+          kubectl rollout restart deployment two-tier-app -n assignment
