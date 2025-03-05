@@ -54,7 +54,7 @@ jobs:
           kubectl apply -f mysql-secrets.yml
           kubectl apply -f mysql-svc.yml
           kubectl apply -f two-tier-app-deployment.yml
-          sleep 60
+          sleep 40
           kubectl apply -f two-tier-app-svc.yml
           sleep 50
           kubectl get all -n assignment
