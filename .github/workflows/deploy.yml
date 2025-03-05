@@ -49,13 +49,13 @@ jobs:
       - name: Deploy Application to AKS
         run: |
           cd k8s 
-          kubectl apply -n assignment -f mysql-deployment.yml
-          kubectl apply -n assignment -f mysql-configmap.yml
-          kubectl apply -n assignment -f mysql-secrets.yml
-          kubectl apply -n assignment -f mysql-svc.yml
-          kubectl apply -n assignment -f two-tier-app-deployment.yml
+          kubectl apply -f mysql-deployment.yml
+          kubectl apply -f mysql-configmap.yml
+          kubectl apply -f mysql-secrets.yml
+          kubectl apply -f mysql-svc.yml
+          kubectl apply -f two-tier-app-deployment.yml
           sleep 60
-          kubectl apply -n assignment -f two-tier-app-svc.yml
+          kubectl apply -f two-tier-app-svc.yml
           sleep 50
           kubectl get all -n assignment
           kubectl rollout restart deployment two-tier-app -n assignment

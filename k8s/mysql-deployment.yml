@@ -4,6 +4,7 @@ metadata:
   name: mysql
   labels:
     app: mysql
+  namespace: assignment
 spec:
   replicas: 1
   selector:
